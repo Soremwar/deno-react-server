@@ -18,6 +18,8 @@ app.use(async (ctx) => {
       const imageBuf = await Deno.readFile(`${Deno.cwd()}/public/index.html`);
       ctx.response.body = imageBuf;
       ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
+    } else {
+      throw e;
     }
   });
 });
