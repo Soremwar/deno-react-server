@@ -2,7 +2,7 @@ import { React, ReactDOM, ReactRouter } from "./deps.ts";
 import routes from "./config/routes.tsx";
 const { BrowserRouter, Route, Switch, Link } = ReactRouter;
 
-const App = (props: any) => {
+const App = () => {
   return (
     <div>
       <BrowserRouter>

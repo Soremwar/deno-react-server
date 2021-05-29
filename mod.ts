@@ -1,7 +1,4 @@
-import {
-  Oak,
-  path,
-} from "./deps.ts";
+import { Oak, path } from "./deps.ts";
 
 const HOSTNAME = "0.0.0.0";
 const PORT = 3000;
@@ -21,7 +18,9 @@ app.use(async (ctx) => {
     // If the file is not found, redirect to the React app where a 404 page can be displayed if desired
     if (e instanceof Oak.httpErrors.NotFound) {
       // This was made manually so that I didn't have to use the send methods again
-      const imageBuf = await Deno.readFile(new URL("public/index.html", import.meta.url));
+      const imageBuf = await Deno.readFile(
+        new URL("public/index.html", import.meta.url),
+      );
       ctx.response.body = imageBuf;
       ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
     } else {
