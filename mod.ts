@@ -1,21 +1,27 @@
-import { Application, httpErrors, send } from "https://deno.land/x/oak/mod.ts";
+import {
+  Oak,
+  path,
+} from "./deps.ts";
 
 const HOSTNAME = "0.0.0.0";
 const PORT = 3000;
 
-const app = new Application();
+const app = new Oak.Application();
+
+// Don't use Deno.cwd(), since that requires access to the root of the directory, and the application
+// only really needs read access to the public folder
 
 // Send static content
 app.use(async (ctx) => {
-  await send(ctx, ctx.request.url.pathname, {
+  await Oak.send(ctx, ctx.request.url.pathname, {
     hidden: true,
-    root: `${Deno.cwd()}/public`,
+    root: path.fromFileUrl(new URL("./public", import.meta.url)),
     index: "index.html",
   }).catch(async (e) => {
     // If the file is not found, redirect to the React app where a 404 page can be displayed if desired
-    if (e instanceof httpErrors.NotFound) {
+    if (e instanceof Oak.httpErrors.NotFound) {
       // This was made manually so that I didn't have to use the send methods again
-      const imageBuf = await Deno.readFile(`${Deno.cwd()}/public/index.html`);
+      const imageBuf = await Deno.readFile(new URL("public/index.html", import.meta.url));
       ctx.response.body = imageBuf;
       ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
     } else {
